@@ -3,7 +3,7 @@
 <br>window open + [shift] to copy<br />
 
 
-example:
+example of the copy:
 
 <br>71.0<br />
 <br>2622.94<br />
