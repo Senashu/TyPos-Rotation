@@ -13,12 +13,13 @@ class TyPos(QtWidgets.QWidget):
         self.y_address = self.module + 0x270B7C
         self.z_address = self.module + 0x270B80
         self.r1_address = self.module + 0x271C20
-
+        self.c1_address = self.module + 0x27EE10
+        self.c2_address = self.module + 0x27EE0C
         self.initUI()
 
     def initUI(self):
         self.setWindowTitle('TyPos')
-        self.setGeometry(860, 190, 100, 69)
+        self.setGeometry(860, 190, 130, 130)
         self.label = QtWidgets.QLabel(self)
         self.update_values()
         self.activateWindow()
@@ -33,12 +34,16 @@ class TyPos(QtWidgets.QWidget):
         y = round(self.mem.read_float(self.y_address), 2)
         z = round(self.mem.read_float(self.z_address), 2)
         r = round(self.mem.read_float(self.r1_address), 5)
+        c1 = round(self.mem.read_float(self.c1_address), 5)
+        c2 = round(self.mem.read_float(self.c2_address), 5)
 
-        if QtWidgets.QApplication.keyboardModifiers() == QtCore.Qt.ShiftModifier and QtWidgets.QApplication.keyboardModifiers() != QtCore.Qt.NoModifier:
-            QtWidgets.QApplication.clipboard().setText(f"{x}\n{y}\n{z}\n{r}")
+        if QtWidgets.QApplication.mouseButtons() == QtCore.Qt.LeftButton and QtWidgets.QApplication.keyboardModifiers() != QtCore.Qt.NoModifier:
+            QtWidgets.QApplication.clipboard().setText(
+                f"mem.write_float(module + X, {x})\nmem.write_float(module + Y, {y})\nmem.write_float(module + Z, {z})\nmem.write_float(module + R, {r})\ntime.sleep(0.3)\nmem.write_float(module + C1, {c1})\nmem.write_float(module + C2, {c2})")
+
             self.label.setText("Copied!")
         else:
-            self.label.setText(f"X:  {x}\nY:  {y}\nZ:  {z}\n\nRotation:  {r}")
+            self.label.setText(f"X:  {x}\nY:  {y}\nZ:  {z}\n\nRotation:  {r}\nCam U/D: {c1}\nCam L/R: {c2}")
         QtCore.QTimer.singleShot(10, self.update_values)
 
 
